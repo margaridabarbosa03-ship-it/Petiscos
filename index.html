@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="pt"><head>
+<html lang="pt">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Petisco</title>
@@ -8,14 +9,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Petisco">
-<link rel="apple-touch-icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;rect width='100' height='100' rx='22' fill='%23B85C38'/&gt;&lt;text y='72' x='50' text-anchor='middle' font-size='58'&gt;🍷&lt;/text&gt;&lt;/svg&gt;">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23B85C38'/><text y='72' x='50' text-anchor='middle' font-size='58'>🍷</text></svg>">
 <meta name="theme-color" content="#B85C38">
 
 <!-- Leaflet (map) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 :root {
@@ -138,6 +139,39 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 .stat-num { font-size:22px; font-weight:700; font-family:'Playfair Display',serif; color:var(--accent); }
 .stat-label { font-size:10px; color:var(--text-2); margin-top:2px; text-transform:uppercase; letter-spacing:0.5px; }
 
+/* ── SEARCH BAR ────────────────────────────────────────────────────────── */
+.search-wrap { position:relative; margin-bottom:14px; }
+.search-wrap input { width:100%; padding:10px 14px 10px 36px; border-radius:12px; border:1.5px solid var(--border); background:var(--card); font-size:14px; color:var(--text); outline:none; transition:border 0.15s; }
+.search-wrap input:focus { border-color:var(--accent); }
+.search-icon { position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:15px; pointer-events:none; }
+.search-clear { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; font-size:16px; color:var(--text-3); cursor:pointer; display:none; padding:2px 4px; }
+
+/* ── HOME STATS SECTION ────────────────────────────────────────────────── */
+.home-stats { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; margin-top:14px; }
+.home-stats-title { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-3); margin-bottom:12px; }
+.home-stat-row { display:flex; align-items:center; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--border); }
+.home-stat-row:last-child { border-bottom:none; }
+.home-stat-label { font-size:13px; color:var(--text-2); }
+.home-stat-value { font-size:13px; font-weight:600; color:var(--text); text-align:right; max-width:55%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* ── DATE BADGE ────────────────────────────────────────────────────────── */
+.card-date { font-size:11px; color:var(--text-3); margin-top:3px; }
+
+/* ── PHOTO UPLOAD ──────────────────────────────────────────────────────── */
+.photo-upload-wrap { display:flex; gap:10px; align-items:center; }
+.photo-preview-box { width:60px; height:60px; border-radius:10px; background:var(--surface); border:1.5px dashed var(--border); overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; cursor:pointer; position:relative; }
+.photo-preview-box img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+.photo-upload-actions { display:flex; flex-direction:column; gap:6px; flex:1; }
+.photo-upload-btn { background:var(--surface); border:1.5px solid var(--border); border-radius:10px; padding:8px 12px; font-size:13px; font-weight:500; color:var(--text); cursor:pointer; text-align:center; }
+.photo-upload-btn:active { background:var(--border); }
+.photo-remove-btn { font-size:12px; color:var(--red); background:none; border:none; cursor:pointer; padding:0; text-align:left; }
+
+/* ── SORT BAR ──────────────────────────────────────────────────────────── */
+.sort-bar { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.sort-label { font-size:12px; color:var(--text-2); white-space:nowrap; }
+.sort-select { flex:1; padding:7px 10px; border-radius:10px; border:1.5px solid var(--border); background:var(--card); font-size:13px; color:var(--text); outline:none; }
+.sort-select:focus { border-color:var(--accent); }
+
 /* ── SECTION LABEL ─────────────────────────────────────────────────────── */
 .section-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-3); margin-bottom:12px; margin-top:4px; }
 
@@ -195,7 +229,8 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 
 /* ── MAP ────────────────────────────────────────────────────────────────── */
 .map-wrap { position:relative; }
-#mapContainer { height:calc(100vh - 72px - 140px); min-height:300px; border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); }
+#page-map { padding-bottom: 16px !important; }
+#mapContainer { height:calc(100dvh - 260px); min-height:300px; border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); }
 .map-legend { display:flex; gap:12px; padding:10px 0; }
 .map-legend-item { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-2); font-weight:500; }
 .map-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
@@ -335,11 +370,11 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 .install-banner.show { display:flex; }
 .install-banner-close { margin-left:auto; background:none; border:none; color:var(--accent); font-size:18px; cursor:pointer; padding:0 2px; flex-shrink:0; }
 </style>
-<link rel="manifest" href="blob:null/404f1265-0d23-4502-94c5-5e48c0b9fba5"></head>
+</head>
 <body>
 
 <!-- ══ LOGIN / REGISTO ════════════════════════════════════════════════════ -->
-<div class="profile-overlay hidden" id="profileOverlay">
+<div class="profile-overlay" id="profileOverlay">
   <div class="profile-logo">🍷 Peti<span>sco</span></div>
   <div class="profile-tagline">O teu diário gastronómico</div>
 
@@ -349,29 +384,29 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
   </div>
 
   <div class="auth-form" id="form-login">
-    <input class="form-input auth-input" id="login-user" placeholder="Nome de utilizador" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
-    <input class="form-input auth-input" id="login-pass" placeholder="Password" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    <input class="form-input auth-input" id="login-user" placeholder="Nome de utilizador" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()" />
+    <input class="form-input auth-input" id="login-pass" placeholder="Password" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
     <div class="auth-error" id="login-error"></div>
     <button class="profile-enter-btn" onclick="doLogin()">Entrar →</button>
   </div>
 
   <div class="auth-form" id="form-register" style="display:none">
-    <input class="form-input auth-input" id="reg-user" placeholder="Nome de utilizador" autocomplete="username" onkeydown="if(event.key==='Enter')doRegister()">
-    <input class="form-input auth-input" id="reg-pass" placeholder="Password" type="password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
-    <input class="form-input auth-input" id="reg-pass2" placeholder="Confirmar password" type="password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
+    <input class="form-input auth-input" id="reg-user" placeholder="Nome de utilizador" autocomplete="username" onkeydown="if(event.key==='Enter')doRegister()" />
+    <input class="form-input auth-input" id="reg-pass" placeholder="Password" type="password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()" />
+    <input class="form-input auth-input" id="reg-pass2" placeholder="Confirmar password" type="password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()" />
     <div class="auth-error" id="reg-error"></div>
     <button class="profile-enter-btn" onclick="doRegister()">Criar conta →</button>
   </div>
 </div>
 
 <!-- ══ HEADER ════════════════════════════════════════════════════════════ -->
-<div class="header" id="mainHeader" style="">
+<div class="header" id="mainHeader" style="display:none">
   <div class="header-top">
     <div class="logo" onclick="goHome()" style="cursor:pointer">🍷 Peti<span>sco</span></div>
     <div class="header-actions">
       <div class="profile-chip" id="profileChip">
         <span class="profile-chip-emoji" id="chipEmoji">👤</span>
-        <span class="profile-chip-name" id="chipName">DaisyMags</span>
+        <span class="profile-chip-name" id="chipName">—</span>
       </div>
       <button class="icon-btn" onclick="openOptsSheet()" title="Opções" style="letter-spacing:2px;padding-bottom:2px">⋯</button>
       <button class="add-btn" id="addBtn" onclick="openModal()" style="display:none">+</button>
@@ -380,7 +415,10 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
   <!-- filter row (visible only in visited/wishlist) -->
   <div id="filterRow" style="display:none">
     <div class="filter-btn-row">
-      <button class="filter-open-btn" id="filterOpenBtn" onclick="openFilterPanel()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3h12M3 7h8M5 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg> Filtrar</button>
+      <button class="filter-open-btn" id="filterOpenBtn" onclick="openFilterPanel()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3h12M3 7h8M5 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Filtrar
+      </button>
       <div class="active-filters-scroll"><div class="active-filters-row" id="activePills"></div></div>
     </div>
   </div>
@@ -404,18 +442,18 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 
 <!-- HOME -->
 <div class="home-content page active" id="page-home">
-  <div class="home-greeting">Olá, <span id="homeUsername">DaisyMags</span> 👋</div>
+  <div class="home-greeting">Olá, <span id="homeUsername">...</span> 👋</div>
   <div class="home-sub">O teu diário gastronómico</div>
   <div class="home-cards">
     <div class="home-card green" onclick="goToSection('visited')">
       <div class="home-card-icon">🍽️</div>
       <div class="home-card-label">Já fui</div>
-      <div class="home-card-count"><strong id="hc-visited">17</strong>restaurantes</div>
+      <div class="home-card-count"><strong id="hc-visited">—</strong>restaurantes</div>
     </div>
     <div class="home-card gold" onclick="goToSection('wishlist')">
       <div class="home-card-icon">🔖</div>
       <div class="home-card-label">Quero ir</div>
-      <div class="home-card-count"><strong id="hc-wishlist">2</strong>lugares</div>
+      <div class="home-card-count"><strong id="hc-wishlist">—</strong>lugares</div>
     </div>
   </div>
   <div class="home-quick">
@@ -428,357 +466,43 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
       <div><div class="home-quick-card-label">Top 10</div><div class="home-quick-card-sub">Os teus favoritos</div></div>
     </div>
   </div>
+  <div class="home-stats" id="home-stats" style="display:none">
+    <div class="home-stats-title">O teu perfil gastronómico</div>
+    <div class="home-stat-row"><span class="home-stat-label">🏆 Melhor avaliado</span><span class="home-stat-value" id="hs-best">—</span></div>
+    <div class="home-stat-row"><span class="home-stat-label">❤️ Categoria favorita</span><span class="home-stat-value" id="hs-cat">—</span></div>
+    <div class="home-stat-row"><span class="home-stat-label">📊 Nota média</span><span class="home-stat-value" id="hs-avg">—</span></div>
+    <div class="home-stat-row"><span class="home-stat-label">💸 Gama de preço + comum</span><span class="home-stat-value" id="hs-price">—</span></div>
+    <div class="home-stat-row"><span class="home-stat-label">🔖 Por visitar</span><span class="home-stat-value" id="hs-wish">—</span></div>
+  </div>
 </div>
 
 <!-- VISITED -->
 <div class="content page" id="page-visited">
   <div class="stats-bar">
-    <div class="stat-card"><div class="stat-num" id="stat-total">17</div><div class="stat-label">Visitados</div></div>
-    <div class="stat-card"><div class="stat-num" id="stat-avg">7.7</div><div class="stat-label">Média</div></div>
-    <div class="stat-card"><div class="stat-num" id="stat-best">8.8</div><div class="stat-label">Melhor</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Visitados</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-avg">—</div><div class="stat-label">Média</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-best">—</div><div class="stat-label">Melhor</div></div>
   </div>
-  <div class="section-label" id="visited-label">17 restaurantes</div>
-  <div id="restaurant-list"><div class="restaurant-card" id="card-4" onclick="toggleCard(4)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍔</div>
-          <div class="score-pill" style="color:#3D6B4F;background:rgba(61,107,79,0.12)">8.8</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">🥇 Soul Burger</div>
-          <div class="card-meta"><span class="card-category">🍔 Burguer</span><span class="card-price">13€</span></div>
-          <div class="card-tags"><span class="tag">👫 Amigos</span><span class="tag">⚡ Rápido</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Soul%20Burger%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-4">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:85%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.5</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:93%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.3</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:90%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:90%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Só com desconto TheFork"</div></div><div class="card-notes">Desconto obrigatório</div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(4)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(4)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-1" onclick="toggleCard(1)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🥩</div>
-          <div class="score-pill" style="color:#3D6B4F;background:rgba(61,107,79,0.12)">8.7</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">🥈 Le Brasserie</div>
-          <div class="card-meta"><span class="card-category">🥩 Bife</span><span class="card-price">25€</span></div>
-          <div class="card-tags"><span class="tag">🕯️ Romântico</span><span class="tag">👫 Amigos</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Le%20Brasserie%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-1">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:85%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.5</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:98%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.8</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:93%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.3</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:79%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.9</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Tudo, mas a Magui não pode dar mais"</div></div><div class="card-notes">Experiência completa</div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(1)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(1)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-5" onclick="toggleCard(5)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🇵🇹</div>
-          <div class="score-pill" style="color:#3D6B4F;background:rgba(61,107,79,0.12)">8.5</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">🥉 Dote</div>
-          <div class="card-meta"><span class="card-category">🇵🇹 Francezinha</span><span class="card-price">15€</span></div>
-          <div class="card-tags"><span class="tag">👫 Amigos</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Dote%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-5">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:78%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.8</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:89%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.9</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:90%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:90%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Boa francezinha em Lisboa"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(5)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(5)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-2" onclick="toggleCard(2)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">☕</div>
-          <div class="score-pill" style="color:#3D6B4F;background:rgba(61,107,79,0.12)">8.4</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">TAB Coffee</div>
-          <div class="card-meta"><span class="card-category">☕ Café</span><span class="card-price">3€</span></div>
-          <div class="card-tags"><span class="tag">📚 Estudar</span><span class="tag">⚡ Rápido</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=TAB%20Coffee%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-2">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:76%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.6</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:91%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.1</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:85%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.5</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:75%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.5</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:93%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.3</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Staff simpático"</div></div><div class="card-notes">Ótimo para trabalhar</div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(2)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(2)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-3" onclick="toggleCard(3)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍝</div>
-          <div class="score-pill" style="color:#3D6B4F;background:rgba(61,107,79,0.12)">8.4</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Pizza Misura Bairro Alto</div>
-          <div class="card-meta"><span class="card-category">🍝 Italian</span><span class="card-price">15€</span></div>
-          <div class="card-tags"><span class="tag">👫 Amigos</span><span class="tag">⚡ Rápido</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Pizza%20Misura%20Bairro%20Alto%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-3">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:74%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.4</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:87%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.7</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:95%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.5</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:83%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.3</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Preço/quantidade e batata brava"</div></div><div class="card-notes">Relação qualidade/preço imbatível</div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(3)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(3)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-8" onclick="toggleCard(8)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍣</div>
-          <div class="score-pill" style="color:#3D6B4F;background:rgba(61,107,79,0.12)">8.4</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Oji Sushi</div>
-          <div class="card-meta"><span class="card-category">🍣 Sushi</span><span class="card-price">15€</span></div>
-          <div class="card-tags"><span class="tag">👫 Amigos</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Oji%20Sushi%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-8">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:87%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.7</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:72%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.2</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:100%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">10</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:83%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.3</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"All you can eat sushi"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(8)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(8)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-17" onclick="toggleCard(17)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">☕</div>
-          <div class="score-pill" style="color:#3D6B4F;background:rgba(61,107,79,0.12)">8.3</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Starbucks Chiado</div>
-          <div class="card-meta"><span class="card-category">☕ Café</span><span class="card-price">4€</span></div>
-          <div class="card-tags"><span class="tag">📚 Estudar</span><span class="tag">⚡ Rápido</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Starbucks%20Chiado%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-17">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:83%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.3</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:82%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.2</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:69%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">6.9</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:99%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.9</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Nada a acrescentar"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(17)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(17)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-6" onclick="toggleCard(6)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🥐</div>
-          <div class="score-pill" style="color:#3D6B4F;background:rgba(61,107,79,0.12)">8.1</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Hygge</div>
-          <div class="card-meta"><span class="card-category">🥐 Brunch &amp; Café</span><span class="card-price">15€</span></div>
-          <div class="card-tags"><span class="tag">📚 Estudar</span><span class="tag">🕯️ Romântico</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Hygge%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-6">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:73%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.3</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:93%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.3</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:77%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.7</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:75%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.5</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:85%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.5</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Bolo Red Velvet"</div></div><div class="card-notes">Ambiente escandinavo aconchegante</div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(6)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(6)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-9" onclick="toggleCard(9)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍜</div>
-          <div class="score-pill" style="color:#3D6B4F;background:rgba(61,107,79,0.12)">8.1</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Shifu</div>
-          <div class="card-meta"><span class="card-category">🍜 Ramen</span><span class="card-price">15€</span></div>
-          <div class="card-tags"><span class="tag">👫 Amigos</span><span class="tag">⚡ Rápido</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Shifu%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-9">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:95%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.5</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:75%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.5</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:85%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.5</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:70%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Gato atendedor de mesas"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(9)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(9)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-16" onclick="toggleCard(16)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍝</div>
-          <div class="score-pill" style="color:#3D6B4F;background:rgba(61,107,79,0.12)">8.0</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Italy Caffè</div>
-          <div class="card-meta"><span class="card-category">🍝 Italian</span><span class="card-price">17€</span></div>
-          <div class="card-tags"><span class="tag">🕯️ Romântico</span><span class="tag">👫 Amigos</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Italy%20Caff%C3%A8%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-16">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:70%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:90%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:77%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.7</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:85%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.5</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Petit gâteau"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(16)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(16)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-7" onclick="toggleCard(7)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍟</div>
-          <div class="score-pill" style="color:#8B6914;background:rgba(139,105,20,0.12)">7.9</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Dona Piadina</div>
-          <div class="card-meta"><span class="card-category">🍟 Snack</span><span class="card-price">10€</span></div>
-          <div class="card-tags"><span class="tag">⚡ Rápido</span><span class="tag">📚 Estudar</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Dona%20Piadina%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-7">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:70%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:70%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:85%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.5</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:90%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Staff simpático"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(7)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(7)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-12" onclick="toggleCard(12)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍟</div>
-          <div class="score-pill" style="color:#8B6914;background:rgba(139,105,20,0.12)">7.9</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Potato Project</div>
-          <div class="card-meta"><span class="card-category">🍟 Snack</span><span class="card-price">2.5€</span></div>
-          <div class="card-tags"><span class="tag">⚡ Rápido</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Potato%20Project%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-12">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:45%;background:#9B4141"></div></div><div class="criterion-val" style="color:#9B4141">4.5</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:93%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.3</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:77%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.7</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:98%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.8</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Guilty pleasure"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(12)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(12)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-10" onclick="toggleCard(10)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍔</div>
-          <div class="score-pill" style="color:#8B6914;background:rgba(139,105,20,0.12)">7.8</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Honorato</div>
-          <div class="card-meta"><span class="card-category">🍔 Burguer</span><span class="card-price">17€</span></div>
-          <div class="card-tags"><span class="tag">👫 Amigos</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Honorato%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-10">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:83%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.3</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:84%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.4</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:90%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:70%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:65%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">6.5</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Nada a acrescentar"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(10)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(10)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-11" onclick="toggleCard(11)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍝</div>
-          <div class="score-pill" style="color:#8B6914;background:rgba(139,105,20,0.12)">7.8</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Casa Nova</div>
-          <div class="card-meta"><span class="card-category">🍝 Italian</span><span class="card-price">15€</span></div>
-          <div class="card-tags"><span class="tag">🕯️ Romântico</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Casa%20Nova%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-11">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:92%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">9.2</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:75%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.5</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:85%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.5</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:60%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">6</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Vista e produtos frescos"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(11)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(11)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-14" onclick="toggleCard(14)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍔</div>
-          <div class="score-pill" style="color:#8B6914;background:rgba(139,105,20,0.12)">6.7</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Street Smash Burger</div>
-          <div class="card-meta"><span class="card-category">🍔 Burguer</span><span class="card-price">13€</span></div>
-          <div class="card-tags"><span class="tag">⚡ Rápido</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Street%20Smash%20Burger%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-14">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:30%;background:#9B4141"></div></div><div class="criterion-val" style="color:#9B4141">3</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:84%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8.4</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:79%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">7.9</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:60%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">6</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Batata frita"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(14)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(14)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-13" onclick="toggleCard(13)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">☕</div>
-          <div class="score-pill" style="color:#8B6914;background:rgba(139,105,20,0.12)">6.3</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Bread &amp; Friends</div>
-          <div class="card-meta"><span class="card-category">☕ Café</span><span class="card-price">4€</span></div>
-          <div class="card-tags"><span class="tag">📚 Estudar</span></div>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Bread%20%26%20Friends%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-13">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:80%;background:#3D6B4F"></div></div><div class="criterion-val" style="color:#3D6B4F">8</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:57%;background:#9B4141"></div></div><div class="criterion-val" style="color:#9B4141">5.7</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:61%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">6.1</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:35%;background:#9B4141"></div></div><div class="criterion-val" style="color:#9B4141">3.5</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Nada de mais"</div></div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(13)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(13)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div><div class="restaurant-card" id="card-15" onclick="toggleCard(15)">
-      <div class="card-main">
-        <div class="card-left">
-          <div class="card-thumb-wrap">🍜</div>
-          <div class="score-pill" style="color:#9B4141;background:rgba(155,65,65,0.12)">3.5</div>
-        </div>
-        <div class="card-info">
-          <div class="card-name">Panda Cantina</div>
-          <div class="card-meta"><span class="card-category">🍜 Ramen</span><span class="card-price">12€</span></div>
-          
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Panda%20Cantina%20Lisboa" target="_blank" class="maps-link" onclick="event.stopPropagation()" title="Google Maps">📍</a>
-      </div>
-      <div class="card-expanded" id="exp-15">
-        <div class="criteria-grid"><div class="criterion"><div class="criterion-label">Espaço &amp; Amb.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:37%;background:#9B4141"></div></div><div class="criterion-val" style="color:#9B4141">3.7</div></div><div class="criterion"><div class="criterion-label">Qualidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:40%;background:#9B4141"></div></div><div class="criterion-val" style="color:#9B4141">4</div></div><div class="criterion"><div class="criterion-label">Quantidade</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:60%;background:#8B6914"></div></div><div class="criterion-val" style="color:#8B6914">6</div></div><div class="criterion"><div class="criterion-label">Preço/Qual.</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:30%;background:#9B4141"></div></div><div class="criterion-val" style="color:#9B4141">3</div></div><div class="criterion"><div class="criterion-label">Prob. Voltar</div><div class="criterion-bar-wrap"><div class="criterion-bar" style="width:10%;background:#9B4141"></div></div><div class="criterion-val" style="color:#9B4141">1</div></div></div><div class="card-highlight"><div class="highlight-label">✦ Destaque</div><div class="highlight-text">"Dor de barriga e veio com um cabelo"</div></div><div class="card-notes">Evitar.</div>
-        <div class="card-exp-actions">
-          <button class="card-exp-btn edit" onclick="event.stopPropagation();editRestaurant(15)">✏️ Editar</button>
-          <button class="card-exp-btn del" onclick="event.stopPropagation();deleteRestaurant(15)">🗑️ Remover</button>
-        </div>
-      </div>
-    </div></div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="search-input" type="search" placeholder="Pesquisar restaurante…" oninput="onSearchInput(this.value)" />
+    <button class="search-clear" id="search-clear" onclick="clearSearch()">×</button>
+  </div>
+  <div class="sort-bar">
+    <span class="sort-label">Ordenar por</span>
+    <select class="sort-select" id="sort-select" onchange="onSortChange(this.value)">
+      <option value="overall">Nota Global</option>
+      <option value="voltar">Prob. Voltar</option>
+      <option value="qual">Qualidade</option>
+      <option value="pq">Preço/Qualidade</option>
+      <option value="espaco">Espaço & Amb.</option>
+      <option value="quant">Quantidade</option>
+      <option value="date">Data da visita</option>
+      <option value="name">Nome (A→Z)</option>
+    </select>
+  </div>
+  <div class="section-label" id="visited-label"></div>
+  <div id="restaurant-list"></div>
 </div>
 
 <!-- WISHLIST -->
@@ -790,7 +514,7 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 <div class="content page" id="page-map">
   <div class="map-wrap">
     <div class="map-legend">
-      <div class="map-legend-item"><div class="map-dot" style="background:#3D6B4F"></div> Já fui</div>
+      <div class="map-legend-item"><div class="map-dot" style="background:#B85C38"></div> Já fui</div>
       <div class="map-legend-item"><div class="map-dot" style="background:#8B6914"></div> Quero ir</div>
     </div>
     <div id="mapContainer">
@@ -810,9 +534,15 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 
 <!-- AMIGOS -->
 <div class="content page" id="page-friends">
+  <div id="cloud-status-banner" style="display:none;background:var(--accent-soft);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--accent);border:1px solid var(--border)">
+    ☁️ <strong>Base de dados partilhada ativa</strong> — podes adicionar amigos de outros dispositivos
+  </div>
+  <div id="no-cloud-banner" style="background:var(--surface);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--text-2);border:1px solid var(--border)">
+    ℹ️ Modo local — amigos só funcionam no mesmo browser. <a href="#" onclick="showToast('Configura o Firebase no HTML para ativar a base de dados partilhada')" style="color:var(--accent)">Saber mais</a>
+  </div>
   <div class="friends-search-wrap">
     <div class="friends-search-row">
-      <input class="form-input" id="friend-search" placeholder="Nome de utilizador…" onkeydown="if(event.key==='Enter')addFriend()">
+      <input class="form-input" id="friend-search" placeholder="Nome de utilizador…" onkeydown="if(event.key==='Enter')addFriend()" />
       <button class="friends-add-btn" onclick="addFriend()">Adicionar</button>
     </div>
     <div class="auth-error" id="friend-error" style="text-align:left;margin-top:4px"></div>
@@ -835,7 +565,7 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 </div>
 
 <!-- ══ BOTTOM NAV ════════════════════════════════════════════════════════ -->
-<div class="bottom-nav" id="bottomNav" style="">
+<div class="bottom-nav" id="bottomNav" style="display:none">
   <button class="nav-item active" onclick="switchNav('home',this)"><div class="nav-icon">🏠</div><div>Início</div></button>
   <button class="nav-item" onclick="switchNav('lists',this)"><div class="nav-icon">🍽️</div><div>Listas</div></button>
   <button class="nav-item" onclick="switchNav('map',this)"><div class="nav-icon">🗺️</div><div>Mapa</div></button>
@@ -910,10 +640,25 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
       <div class="opts-icon gold">💾</div>
       <div><div class="opts-label">Exportar dados</div><div class="opts-sub">Descarrega o HTML com todos os dados atuais</div></div>
     </div>
+    <div class="opts-row" id="adminRow" style="display:none" onclick="openAdminPanel();document.getElementById('optsSheet').classList.remove('show')">
+      <div class="opts-icon" style="background:rgba(100,60,180,0.12)">🛡️</div>
+      <div><div class="opts-label">Painel Admin</div><div class="opts-sub">Ver todos os utilizadores e dados</div></div>
+    </div>
     <div class="opts-row" onclick="logout()">
       <div class="opts-icon red">🚪</div>
       <div><div class="opts-label">Sair</div><div class="opts-sub">Terminar sessão e voltar ao login</div></div>
     </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL OVERLAY -->
+<div class="modal-overlay hidden" id="adminOverlay" onclick="if(event.target===this)closeAdminPanel()">
+  <div class="modal" style="max-height:85vh;overflow-y:auto">
+    <div class="modal-header">
+      <div class="modal-title">🛡️ Painel Admin</div>
+      <button class="modal-close" onclick="closeAdminPanel()">×</button>
+    </div>
+    <div id="adminContent" style="padding:8px 0"></div>
   </div>
 </div>
 
@@ -931,7 +676,7 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
     </div>
     <div class="form-group">
       <label class="form-label">Nome do restaurante</label>
-      <input class="form-input" id="f-name" placeholder="Ex: Le Brasserie">
+      <input class="form-input" id="f-name" placeholder="Ex: Le Brasserie" />
     </div>
     <div class="form-group">
       <label class="form-label">Categoria</label>
@@ -942,7 +687,7 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
         <button class="tag-toggle" onclick="toggleCatTag(this,'Sushi')">🍣 Sushi</button>
         <button class="tag-toggle" onclick="toggleCatTag(this,'Ramen')">🍜 Ramen</button>
         <button class="tag-toggle" onclick="toggleCatTag(this,'Café')">☕ Café</button>
-        <button class="tag-toggle" onclick="toggleCatTag(this,'Brunch &amp; Café')">🥐 Brunch</button>
+        <button class="tag-toggle" onclick="toggleCatTag(this,'Brunch & Café')">🥐 Brunch</button>
         <button class="tag-toggle" onclick="toggleCatTag(this,'Snack')">🍟 Snack</button>
         <button class="tag-toggle" onclick="toggleCatTag(this,'Francezinha')">🇵🇹 Francezinha</button>
         <button class="tag-toggle" onclick="toggleCatTag(this,'Fine Dining')">✨ Fine Dining</button>
@@ -951,34 +696,48 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
     </div>
     <div class="form-group">
       <label class="form-label">Preço médio</label>
-      <input class="form-input" id="f-price" placeholder="Ex: 15€">
+      <input class="form-input" id="f-price" placeholder="Ex: 15€" />
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Foto (URL)</label>
-        <input class="form-input" id="f-photo" placeholder="https://..." type="url">
+    <div class="form-group">
+      <label class="form-label">Foto</label>
+      <div class="photo-upload-wrap">
+        <div class="photo-preview-box" id="photo-preview-box" onclick="document.getElementById('f-photo-file').click()">
+          <span id="photo-preview-emoji">📷</span>
+          <img id="photo-preview-img" src="" alt="" style="display:none">
+        </div>
+        <div class="photo-upload-actions">
+          <button type="button" class="photo-upload-btn" onclick="document.getElementById('f-photo-file').click()">📷 Câmara / Galeria</button>
+          <button type="button" class="photo-remove-btn" id="photo-remove-btn" style="display:none" onclick="clearPhoto()">× Remover foto</button>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Link Google Maps</label>
-        <input class="form-input" id="f-maps" placeholder="https://maps.google.com/..." type="url">
-      </div>
+      <input type="file" id="f-photo-file" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoUpload(this)">
+      <!-- hidden stores current photo data -->
+      <input type="hidden" id="f-photo">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Link Google Maps</label>
+      <input class="form-input" id="f-maps" placeholder="https://maps.google.com/..." type="url" />
     </div>
     <div id="ratings-section">
       <div class="form-group">
         <label class="form-label">Avaliações</label>
-        <div class="score-input-row"><span class="score-row-label">Espaço &amp; Amb.</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="s-espaco" oninput="updDisp('espaco',this.value)"><span class="score-display" id="disp-espaco">5</span></div>
+        <div class="score-input-row"><span class="score-row-label">Espaço & Amb.</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="s-espaco" oninput="updDisp('espaco',this.value)"><span class="score-display" id="disp-espaco">5</span></div>
         <div class="score-input-row"><span class="score-row-label">Qualidade</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="s-qual" oninput="updDisp('qual',this.value)"><span class="score-display" id="disp-qual">5</span></div>
         <div class="score-input-row"><span class="score-row-label">Quantidade</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="s-quant" oninput="updDisp('quant',this.value)"><span class="score-display" id="disp-quant">5</span></div>
         <div class="score-input-row"><span class="score-row-label">Preço/Qual.</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="s-pq" oninput="updDisp('pq',this.value)"><span class="score-display" id="disp-pq">5</span></div>
         <div class="score-input-row"><span class="score-row-label">Prob. Voltar</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="s-voltar" oninput="updDisp('voltar',this.value)"><span class="score-display" id="disp-voltar">5</span></div>
       </div>
       <div class="form-group">
+        <label class="form-label">Data da visita</label>
+        <input class="form-input" id="f-date" type="date" />
+      </div>
+      <div class="form-group">
         <label class="form-label">Destaque</label>
-        <input class="form-input" id="f-destaque" placeholder="O prato ou momento especial">
+        <input class="form-input" id="f-destaque" placeholder="O prato ou momento especial" />
       </div>
       <div class="form-group">
         <label class="form-label">Notas</label>
-        <input class="form-input" id="f-notas" placeholder="Observações livres">
+        <input class="form-input" id="f-notas" placeholder="Observações livres" />
       </div>
     </div>
     <div class="form-group">
@@ -1005,14 +764,14 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
     </div>
     <div class="form-group">
       <label class="form-label">Avaliações</label>
-      <div class="score-input-row"><span class="score-row-label">Espaço &amp; Amb.</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="r-espaco" oninput="updDisp2('espaco',this.value)"><span class="score-display" id="rdisp-espaco">5</span></div>
+      <div class="score-input-row"><span class="score-row-label">Espaço & Amb.</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="r-espaco" oninput="updDisp2('espaco',this.value)"><span class="score-display" id="rdisp-espaco">5</span></div>
       <div class="score-input-row"><span class="score-row-label">Qualidade</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="r-qual" oninput="updDisp2('qual',this.value)"><span class="score-display" id="rdisp-qual">5</span></div>
       <div class="score-input-row"><span class="score-row-label">Quantidade</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="r-quant" oninput="updDisp2('quant',this.value)"><span class="score-display" id="rdisp-quant">5</span></div>
       <div class="score-input-row"><span class="score-row-label">Preço/Qual.</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="r-pq" oninput="updDisp2('pq',this.value)"><span class="score-display" id="rdisp-pq">5</span></div>
       <div class="score-input-row"><span class="score-row-label">Prob. Voltar</span><input type="range" class="score-slider" min="0" max="10" step="0.5" value="5" id="r-voltar" oninput="updDisp2('voltar',this.value)"><span class="score-display" id="rdisp-voltar">5</span></div>
     </div>
-    <div class="form-group"><label class="form-label">Destaque</label><input class="form-input" id="r-destaque" placeholder="O prato ou momento especial"></div>
-    <div class="form-group"><label class="form-label">Notas</label><input class="form-input" id="r-notas" placeholder="Observações livres"></div>
+    <div class="form-group"><label class="form-label">Destaque</label><input class="form-input" id="r-destaque" placeholder="O prato ou momento especial"/></div>
+    <div class="form-group"><label class="form-label">Notas</label><input class="form-input" id="r-notas" placeholder="Observações livres"/></div>
     <button class="btn-primary" onclick="confirmMoveToVisited()">Mover para Visitados ✓</button>
   </div>
 </div>
@@ -1049,7 +808,7 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
         <div class="onboard-title">Avalia em 5 critérios</div>
         <div class="onboard-text">Para cada restaurante avalia o <strong>Espaço</strong>, <strong>Qualidade</strong>, <strong>Quantidade</strong>, <strong>Preço/Qualidade</strong> e a <strong>Probabilidade de Voltar</strong>.</div>
         <div class="onboard-criteria">
-          <div class="onboard-crit"><span>Espaço &amp; Amb.</span><div class="onboard-bar" style="width:85%"></div><span>8.5</span></div>
+          <div class="onboard-crit"><span>Espaço & Amb.</span><div class="onboard-bar" style="width:85%"></div><span>8.5</span></div>
           <div class="onboard-crit"><span>Qualidade</span><div class="onboard-bar" style="width:90%"></div><span>9.0</span></div>
           <div class="onboard-crit"><span>Quantidade</span><div class="onboard-bar" style="width:75%"></div><span>7.5</span></div>
         </div>
@@ -1081,8 +840,29 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 
 <script>
 // ══ SEED DATA ════════════════════════════════════════════════════════════════
-const SEED = [{"id":1,"name":"Le Brasserie","category":"Bife","price":"25€","espaco":8.5,"qual":9.8,"quant":9.3,"pq":7.9,"voltar":8,"destaque":"Tudo, mas a Magui não pode dar mais","notas":"Experiência completa","tags":["Jantar Romântico","Jantar com Amigos"],"maps":"https://www.google.com/maps/search/?api=1&query=Le%20Brasserie%20Lisboa"},{"id":2,"name":"TAB Coffee","category":"Café","price":"3€","espaco":7.6,"qual":9.1,"quant":8.5,"pq":7.5,"voltar":9.3,"destaque":"Staff simpático","notas":"Ótimo para trabalhar","tags":["Estudar","Comida Rápida"],"maps":"https://www.google.com/maps/search/?api=1&query=TAB%20Coffee%20Lisboa"},{"id":3,"name":"Pizza Misura Bairro Alto","category":"Italian","price":"15€","espaco":8,"qual":7.4,"quant":8.7,"pq":9.5,"voltar":8.3,"destaque":"Preço/quantidade e batata brava","notas":"Relação qualidade/preço imbatível","tags":["Jantar com Amigos","Comida Rápida"],"maps":"https://www.google.com/maps/search/?api=1&query=Pizza%20Misura%20Bairro%20Alto%20Lisboa"},{"id":4,"name":"Soul Burger","category":"Burguer","price":"13€","espaco":8.5,"qual":9.3,"quant":9,"pq":9,"voltar":8,"destaque":"Só com desconto TheFork","notas":"Desconto obrigatório","tags":["Jantar com Amigos","Comida Rápida"],"maps":"https://www.google.com/maps/search/?api=1&query=Soul%20Burger%20Lisboa"},{"id":5,"name":"Dote","category":"Francezinha","price":"15€","espaco":7.8,"qual":8.9,"quant":9,"pq":8,"voltar":9,"destaque":"Boa francezinha em Lisboa","notas":"","tags":["Jantar com Amigos"],"maps":"https://www.google.com/maps/search/?api=1&query=Dote%20Lisboa"},{"id":6,"name":"Hygge","category":"Brunch & Café","price":"15€","espaco":7.3,"qual":9.3,"quant":7.7,"pq":7.5,"voltar":8.5,"destaque":"Bolo Red Velvet","notas":"Ambiente escandinavo aconchegante","tags":["Estudar","Jantar Romântico"],"maps":"https://www.google.com/maps/search/?api=1&query=Hygge%20Lisboa"},{"id":7,"name":"Dona Piadina","category":"Snack","price":"10€","espaco":7,"qual":8,"quant":7,"pq":8.5,"voltar":9,"destaque":"Staff simpático","notas":"","tags":["Comida Rápida","Estudar"],"maps":"https://www.google.com/maps/search/?api=1&query=Dona%20Piadina%20Lisboa"},{"id":8,"name":"Oji Sushi","category":"Sushi","price":"15€","espaco":8.7,"qual":7.2,"quant":10,"pq":8.3,"voltar":8,"destaque":"All you can eat sushi","notas":"","tags":["Jantar com Amigos"],"maps":"https://www.google.com/maps/search/?api=1&query=Oji%20Sushi%20Lisboa"},{"id":9,"name":"Shifu","category":"Ramen","price":"15€","espaco":9.5,"qual":7.5,"quant":8.5,"pq":8,"voltar":7,"destaque":"Gato atendedor de mesas","notas":"","tags":["Jantar com Amigos","Comida Rápida"],"maps":"https://www.google.com/maps/search/?api=1&query=Shifu%20Lisboa"},{"id":10,"name":"Honorato","category":"Burguer","price":"17€","espaco":8.3,"qual":8.4,"quant":9,"pq":7,"voltar":6.5,"destaque":"Nada a acrescentar","notas":"","tags":["Jantar com Amigos"],"maps":"https://www.google.com/maps/search/?api=1&query=Honorato%20Lisboa"},{"id":11,"name":"Casa Nova","category":"Italian","price":"15€","espaco":8,"qual":9.2,"quant":7.5,"pq":8.5,"voltar":6,"destaque":"Vista e produtos frescos","notas":"","tags":["Jantar Romântico"],"maps":"https://www.google.com/maps/search/?api=1&query=Casa%20Nova%20Lisboa"},{"id":12,"name":"Potato Project","category":"Snack","price":"2.5€","espaco":4.5,"qual":9.3,"quant":8,"pq":7.7,"voltar":9.8,"destaque":"Guilty pleasure","notas":"","tags":["Comida Rápida"],"maps":"https://www.google.com/maps/search/?api=1&query=Potato%20Project%20Lisboa"},{"id":13,"name":"Bread & Friends","category":"Café","price":"4€","espaco":8,"qual":8,"quant":5.7,"pq":6.1,"voltar":3.5,"destaque":"Nada de mais","notas":"","tags":["Estudar"],"maps":"https://www.google.com/maps/search/?api=1&query=Bread%20%26%20Friends%20Lisboa"},{"id":14,"name":"Street Smash Burger","category":"Burguer","price":"13€","espaco":3,"qual":8.4,"quant":7.9,"pq":8,"voltar":6,"destaque":"Batata frita","notas":"","tags":["Comida Rápida"],"maps":"https://www.google.com/maps/search/?api=1&query=Street%20Smash%20Burger%20Lisboa"},{"id":15,"name":"Panda Cantina","category":"Ramen","price":"12€","espaco":3.7,"qual":4,"quant":6,"pq":3,"voltar":1,"destaque":"Dor de barriga e veio com um cabelo","notas":"Evitar.","tags":[],"maps":"https://www.google.com/maps/search/?api=1&query=Panda%20Cantina%20Lisboa"},{"id":16,"name":"Italy Caffè","category":"Italian","price":"17€","espaco":7,"qual":9,"quant":7.7,"pq":8,"voltar":8.5,"destaque":"Petit gâteau","notas":"","tags":["Jantar Romântico","Jantar com Amigos"],"maps":"https://www.google.com/maps/search/?api=1&query=Italy%20Caff%C3%A8%20Lisboa"},{"id":17,"name":"Starbucks Chiado","category":"Café","price":"4€","espaco":8.3,"qual":8,"quant":8.2,"pq":6.9,"voltar":9.9,"destaque":"Nada a acrescentar","notas":"","tags":["Estudar","Comida Rápida"],"maps":"https://www.google.com/maps/search/?api=1&query=Starbucks%20Chiado%20Lisboa"}];
-const SEED_WISHLIST = [{"id":100,"name":"Belcanto","category":"Fine Dining","price":"~80€","tags":["Jantar Romântico"],"maps":"https://www.google.com/maps/search/?api=1&query=Belcanto%20Lisboa"},{"id":101,"name":"Tasca do Chico","category":"Portuguesa","price":"~25€","tags":["Jantar com Amigos"],"maps":"https://www.google.com/maps/search/?api=1&query=Tasca%20do%20Chico%20Lisboa"}];
+const SEED = [
+  { id:1,  name:"Le Brasserie",             lat:38.71168, lng:-9.14452, category:"Bife",         price:"25€",  espaco:8.5, qual:9.8, quant:9.3, pq:7.9, voltar:8.0, destaque:"Tudo, mas a Magui não pode dar mais",   notas:"Experiência completa",              tags:["Jantar Romântico","Jantar com Amigos"] },
+  { id:2,  name:"TAB Coffee",               lat:38.71917, lng:-9.15133, category:"Café",         price:"3€",   espaco:7.6, qual:9.1, quant:8.5, pq:7.5, voltar:9.3, destaque:"Staff simpático",                        notas:"Ótimo para trabalhar",              tags:["Estudar","Comida Rápida"] },
+  { id:3,  name:"Pizza Misura Bairro Alto", lat:38.71348, lng:-9.14518, category:"Italian",      price:"15€",  espaco:8.0, qual:7.4, quant:8.7, pq:9.5, voltar:8.3, destaque:"Preço/quantidade e batata brava",        notas:"Relação qualidade/preço imbatível", tags:["Jantar com Amigos","Comida Rápida"] },
+  { id:4,  name:"Soul Burger",              lat:38.71650, lng:-9.14890, category:"Burguer",      price:"13€",  espaco:8.5, qual:9.3, quant:9.0, pq:9.0, voltar:8.0, destaque:"Só com desconto TheFork",               notas:"Desconto obrigatório",              tags:["Jantar com Amigos","Comida Rápida"] },
+  { id:5,  name:"Dote",                     lat:38.71880, lng:-9.13960, category:"Francezinha",  price:"15€",  espaco:7.8, qual:8.9, quant:9.0, pq:8.0, voltar:9.0, destaque:"Boa francezinha em Lisboa",             notas:"",                                  tags:["Jantar com Amigos"] },
+  { id:6,  name:"Hygge",                    lat:38.72218, lng:-9.14962, category:"Brunch & Café",price:"15€",  espaco:7.3, qual:9.3, quant:7.7, pq:7.5, voltar:8.5, destaque:"Bolo Red Velvet",                       notas:"Ambiente escandinavo aconchegante", tags:["Estudar","Jantar Romântico"] },
+  { id:7,  name:"Dona Piadina",             lat:38.71080, lng:-9.14050, category:"Snack",        price:"10€",  espaco:7.0, qual:8.0, quant:7.0, pq:8.5, voltar:9.0, destaque:"Staff simpático",                       notas:"",                                  tags:["Comida Rápida","Estudar"] },
+  { id:8,  name:"Oji Sushi",                lat:38.71558, lng:-9.13658, category:"Sushi",        price:"15€",  espaco:8.7, qual:7.2, quant:10.0,pq:8.3, voltar:8.0, destaque:"All you can eat sushi",                 notas:"",                                  tags:["Jantar com Amigos"] },
+  { id:9,  name:"Shifu",                    lat:38.71950, lng:-9.14350, category:"Ramen",        price:"15€",  espaco:9.5, qual:7.5, quant:8.5, pq:8.0, voltar:7.0, destaque:"Gato atendedor de mesas",               notas:"",                                  tags:["Jantar com Amigos","Comida Rápida"] },
+  { id:10, name:"Honorato",                 lat:38.71780, lng:-9.15280, category:"Burguer",      price:"17€",  espaco:8.3, qual:8.4, quant:9.0, pq:7.0, voltar:6.5, destaque:"Nada a acrescentar",                    notas:"",                                  tags:["Jantar com Amigos"] },
+  { id:11, name:"Casa Nova",                lat:38.71400, lng:-9.13300, category:"Italian",      price:"15€",  espaco:8.0, qual:9.2, quant:7.5, pq:8.5, voltar:6.0, destaque:"Vista e produtos frescos",              notas:"",                                  tags:["Jantar Romântico"] },
+  { id:12, name:"Potato Project",           lat:38.71078, lng:-9.14158, category:"Snack",        price:"2.5€", espaco:4.5, qual:9.3, quant:8.0, pq:7.7, voltar:9.8, destaque:"Guilty pleasure",                      notas:"",                                  tags:["Comida Rápida"] },
+  { id:13, name:"Bread & Friends",          lat:38.72300, lng:-9.14550, category:"Café",         price:"4€",   espaco:8.0, qual:8.0, quant:5.7, pq:6.1, voltar:3.5, destaque:"Nada de mais",                          notas:"",                                  tags:["Estudar"] },
+  { id:14, name:"Street Smash Burger",      lat:38.70850, lng:-9.13580, category:"Burguer",      price:"13€",  espaco:3.0, qual:8.4, quant:7.9, pq:8.0, voltar:6.0, destaque:"Batata frita",                          notas:"",                                  tags:["Comida Rápida"] },
+  { id:15, name:"Panda Cantina",            lat:38.71720, lng:-9.14350, category:"Ramen",        price:"12€",  espaco:3.7, qual:4.0, quant:6.0, pq:3.0, voltar:1.0, destaque:"Dor de barriga e veio com um cabelo",   notas:"Evitar.",                           tags:[] },
+  { id:16, name:"Italy Caffè",              lat:38.71280, lng:-9.14680, category:"Italian",      price:"17€",  espaco:7.0, qual:9.0, quant:7.7, pq:8.0, voltar:8.5, destaque:"Petit gâteau",                         notas:"",                                  tags:["Jantar Romântico","Jantar com Amigos"] },
+  { id:17, name:"Starbucks Chiado",         lat:38.71068, lng:-9.14208, category:"Café",         price:"4€",   espaco:8.3, qual:8.0, quant:8.2, pq:6.9, voltar:9.9, destaque:"Nada a acrescentar",                    notas:"",                                  tags:["Estudar","Comida Rápida"] },
+];
+const SEED_WISHLIST = [
+  { id:100, name:"Belcanto",       lat:38.71090, lng:-9.14182, category:"Fine Dining", price:"~80€", tags:["Jantar Romântico"] },
+  { id:101, name:"Tasca do Chico", lat:38.71300, lng:-9.14580, category:"Portuguesa",  price:"~25€", tags:["Jantar com Amigos"] },
+];
 
 // ── Demo restaurants shown to new users ──────────────────────────────────────
 const DEMO_RESTAURANTS = [
@@ -1115,6 +895,7 @@ function saveProfileData() {
   if (!currentUser) return;
   localStorage.setItem(userKey(currentUser.id,'r'), JSON.stringify(RESTAURANTS));
   localStorage.setItem(userKey(currentUser.id,'w'), JSON.stringify(wishlist));
+  syncUserToCloud(); // sync to cloud if Firebase configured
 }
 
 let RESTAURANTS = [], wishlist = [];
@@ -1130,6 +911,9 @@ function activateUser(user) {
   document.getElementById('chipEmoji').textContent = '👤';
   document.getElementById('chipName').textContent  = user.name;
   document.getElementById('homeUsername').textContent = user.name;
+  // Show admin panel only for the creator account
+  const adminRow = document.getElementById('adminRow');
+  if (adminRow) adminRow.style.display = user.id === 'u_daisymags' ? '' : 'none';
 }
 
 // ── Auth UI ──────────────────────────────────────────────────────────────────
@@ -1179,6 +963,7 @@ function enterApp(user) {
   if (!localStorage.getItem(userKey(user.id,'onboarded'))) {
     setTimeout(showOnboarding, 400);
   }
+  setTimeout(syncUserToCloud, 1000); // sync to cloud if Firebase configured
 }
 
 function logout() {
@@ -1244,15 +1029,55 @@ function priceRange(r) {
   if (isNaN(n)) return '€€';
   return n<=8?'€':n<=20?'€€':'€€€';
 }
+let currentSearch = '';
+let currentSort = 'overall';
+
+function onSortChange(val) {
+  currentSort = val;
+  renderVisited();
+}
+
+function getSortFn() {
+  switch(currentSort) {
+    case 'voltar': return (a,b) => b.voltar - a.voltar;
+    case 'qual':   return (a,b) => b.qual - a.qual;
+    case 'pq':     return (a,b) => b.pq - a.pq;
+    case 'espaco': return (a,b) => b.espaco - a.espaco;
+    case 'quant':  return (a,b) => b.quant - a.quant;
+    case 'date':   return (a,b) => {
+      if (!a.visitDate && !b.visitDate) return 0;
+      if (!a.visitDate) return 1;
+      if (!b.visitDate) return -1;
+      return b.visitDate.localeCompare(a.visitDate);
+    };
+    case 'name':   return (a,b) => a.name.localeCompare(b.name, 'pt');
+    default:       return (a,b) => parseFloat(calcOverall(b)) - parseFloat(calcOverall(a));
+  }
+}
+
 function getFiltered() {
+  const q = currentSearch.toLowerCase();
   return RESTAURANTS.filter(r=>{
-    return (!currentCat.length   || currentCat.includes(r.category))
+    return (!q || r.name.toLowerCase().includes(q))
+        && (!currentCat.length   || currentCat.includes(r.category))
         && (!currentVibe.length  || currentVibe.some(v=>r.tags.includes(v)))
         && (!currentPrice.length || currentPrice.includes(priceRange(r)))
         && parseFloat(calcOverall(r))>=currentMinScore;
-  }).sort((a,b)=>parseFloat(calcOverall(b))-parseFloat(calcOverall(a)));
+  }).sort(getSortFn());
 }
 function countActiveFilters() { return [currentCat.length>0,currentVibe.length>0,currentPrice.length>0,currentMinScore>0].filter(Boolean).length; }
+
+function onSearchInput(val) {
+  currentSearch = val.trim();
+  document.getElementById('search-clear').style.display = currentSearch ? 'block' : 'none';
+  renderVisited();
+}
+function clearSearch() {
+  currentSearch = '';
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-clear').style.display = 'none';
+  renderVisited();
+}
 
 // ══ RENDER ════════════════════════════════════════════════════════════════════
 function renderVisited() {
@@ -1264,9 +1089,12 @@ function renderVisited() {
   document.getElementById('stat-total').textContent = total;
   document.getElementById('stat-avg').textContent   = avg;
   document.getElementById('stat-best').textContent  = best;
-  const hasF = countActiveFilters()>0;
+  const hasF = countActiveFilters()>0 || currentSearch;
   document.getElementById('visited-label').textContent = hasF ? `${data.length} de ${total} restaurantes` : `${total} restaurantes`;
-  if (!data.length) { list.innerHTML=`<div class="no-results">Nenhum restaurante com estes filtros 🤷</div>`; return; }
+  if (!data.length) {
+    list.innerHTML=`<div class="no-results">${currentSearch ? `Nenhum resultado para "${currentSearch}" 🔍` : 'Nenhum restaurante com estes filtros 🤷'}</div>`;
+    return;
+  }
   const medals=['🥇','🥈','🥉'];
   list.innerHTML = data.map((r,idx)=>{
     const ov=calcOverall(r), isTop=idx<3&&!hasF;
@@ -1284,6 +1112,7 @@ function renderVisited() {
         <div class="card-info">
           <div class="card-name">${isTop?medals[idx]+' ':''}${r.name}</div>
           <div class="card-meta"><span class="card-category">${catEmoji(r.category)} ${r.category}</span><span class="card-price">${r.price}</span></div>
+          ${r.visitDate ? `<div class="card-date">📅 ${new Date(r.visitDate+'T12:00:00').toLocaleDateString('pt-PT',{day:'numeric',month:'short',year:'numeric'})}</div>` : ''}
           ${tagsHTML}
         </div>
         ${mapsBtn(r)}
@@ -1350,6 +1179,33 @@ function renderTop10() {
 function updateHomeCounters() {
   document.getElementById('hc-visited').textContent  = RESTAURANTS.length;
   document.getElementById('hc-wishlist').textContent = wishlist.length;
+
+  const statsPanel = document.getElementById('home-stats');
+  if (!RESTAURANTS.length) { statsPanel.style.display='none'; return; }
+  statsPanel.style.display = '';
+
+  // Best restaurant
+  const sorted = [...RESTAURANTS].sort((a,b)=>parseFloat(calcOverall(b))-parseFloat(calcOverall(a)));
+  document.getElementById('hs-best').textContent = `${sorted[0].name} (${calcOverall(sorted[0])})`;
+
+  // Favorite category (most frequent)
+  const catCount = {};
+  RESTAURANTS.forEach(r=>{ catCount[r.category]=(catCount[r.category]||0)+1; });
+  const favCat = Object.entries(catCount).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('hs-cat').textContent = `${catEmoji(favCat[0])} ${favCat[0]} (${favCat[1]}×)`;
+
+  // Average score
+  const avg = (RESTAURANTS.reduce((s,r)=>s+parseFloat(calcOverall(r)),0)/RESTAURANTS.length).toFixed(1);
+  document.getElementById('hs-avg').textContent = `${avg} / 10`;
+
+  // Most common price range
+  const priceCount = {};
+  RESTAURANTS.forEach(r=>{ const p=priceRange(r); priceCount[p]=(priceCount[p]||0)+1; });
+  const favPrice = Object.entries(priceCount).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('hs-price').textContent = `${favPrice[0]}`;
+
+  // Wishlist count
+  document.getElementById('hs-wish').textContent = wishlist.length ? `${wishlist.length} lugar${wishlist.length!==1?'es':''} para explorar` : 'Lista vazia';
 }
 
 // ══ CARD TOGGLE ══════════════════════════════════════════════════════════════
@@ -1374,7 +1230,9 @@ function editRestaurant(id) {
   document.getElementById('f-name').value     = r.name;
   document.getElementById('f-price').value    = r.price;
   document.getElementById('f-photo').value    = r.photo||'';
+  setPhotoPreview(r.photo||'');
   document.getElementById('f-maps').value     = r.maps||'';
+  document.getElementById('f-date').value      = r.visitDate||'';
   document.getElementById('f-destaque').value = r.destaque||'';
   document.getElementById('f-notas').value    = r.notas||'';
   ['espaco','qual','quant','pq','voltar'].forEach(k=>{
@@ -1405,6 +1263,7 @@ function editWish(id) {
   document.getElementById('f-name').value     = r.name;
   document.getElementById('f-price').value    = r.price;
   document.getElementById('f-photo').value    = r.photo||'';
+  setPhotoPreview(r.photo||'');
   document.getElementById('f-maps').value     = r.maps||'';
   selectedTags=[...r.tags];
   document.querySelectorAll('#tags-selector .tag-toggle').forEach(btn=>{
@@ -1447,6 +1306,14 @@ function switchNav(page, el) {
 function goHome() { goToSection('home'); }
 
 function goToSection(page) {
+  // Clear search when leaving visited
+  if (page !== 'visited' && currentSearch) {
+    currentSearch = '';
+    const si = document.getElementById('search-input');
+    const sc = document.getElementById('search-clear');
+    if (si) si.value = '';
+    if (sc) sc.style.display = 'none';
+  }
   currentPage = page;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(`page-${page}`).classList.add('active');
@@ -1544,7 +1411,9 @@ function openModal() {
   document.getElementById('type-visited').classList.add('selected');
   document.getElementById('type-wishlist').classList.remove('selected');
   document.getElementById('ratings-section').style.display='block';
-  ['f-name','f-price','f-photo','f-maps','f-destaque','f-notas'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  ['f-name','f-price','f-photo','f-maps','f-date','f-destaque','f-notas'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  const fi=document.getElementById('f-photo-file'); if(fi) fi.value='';
+  setPhotoPreview('');
   ['espaco','qual','quant','pq','voltar'].forEach(k=>{ document.getElementById(`s-${k}`).value=5; document.getElementById(`disp-${k}`).textContent='5'; });
   document.querySelectorAll('#tags-selector .tag-toggle').forEach(t=>t.classList.remove('selected'));
   document.querySelectorAll('#cat-selector .tag-toggle').forEach(t=>t.classList.remove('selected'));
@@ -1587,6 +1456,7 @@ function saveRestaurant() {
       r.voltar=parseFloat(document.getElementById('s-voltar').value);
       r.destaque=document.getElementById('f-destaque').value.trim();
       r.notas=document.getElementById('f-notas').value.trim();
+      r.visitDate=document.getElementById('f-date').value||r.visitDate||'';
       r.tags=[...selectedTags]; r.maps=customMaps||mapsUrl(name);
       saveProfileData(); renderVisited(); showToast('Alterações guardadas ✓');
     } else {
@@ -1606,6 +1476,7 @@ function saveRestaurant() {
     r.voltar=parseFloat(document.getElementById('s-voltar').value);
     r.destaque=document.getElementById('f-destaque').value.trim();
     r.notas=document.getElementById('f-notas').value.trim();
+    r.visitDate=document.getElementById('f-date').value||'';
     RESTAURANTS.push(r); saveProfileData(); renderVisited(); goToSection('visited');
     showToast(`${name} adicionado! 🎉`);
   } else {
@@ -1637,7 +1508,54 @@ function confirmMoveToVisited() {
 }
 
 // ══ MAP ════════════════════════════════════════════════════════════════════════
-let mapInstance=null, mapInitialized=false;
+// ══ PHOTO UPLOAD ══════════════════════════════════════════════════════════════
+function handlePhotoUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const MAX = 600;
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      if (w > h && w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      else if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.78);
+      document.getElementById('f-photo').value = dataUrl;
+      setPhotoPreview(dataUrl);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function setPhotoPreview(src) {
+  const previewImg  = document.getElementById('photo-preview-img');
+  const previewEmoji = document.getElementById('photo-preview-emoji');
+  const removeBtn   = document.getElementById('photo-remove-btn');
+  if (src) {
+    previewImg.src = src;
+    previewImg.style.display = 'block';
+    previewEmoji.style.display = 'none';
+    removeBtn.style.display = '';
+  } else {
+    previewImg.src = '';
+    previewImg.style.display = 'none';
+    previewEmoji.style.display = '';
+    removeBtn.style.display = 'none';
+  }
+}
+
+function clearPhoto() {
+  document.getElementById('f-photo').value = '';
+  document.getElementById('f-photo-file').value = '';
+  setPhotoPreview('');
+}
+
+let mapInstance=null, mapMarkers=[];
 const geocodeCache = JSON.parse(localStorage.getItem('vc_geocache')||'{}');
 
 async function geocode(name) {
@@ -1646,7 +1564,7 @@ async function geocode(name) {
     const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(name+' Lisboa Portugal')}&limit=1`,
       {headers:{'Accept-Language':'pt'}});
     const data = await res.json();
-    if (data.length) {
+    if (data && data.length) {
       const coords=[parseFloat(data[0].lat), parseFloat(data[0].lon)];
       geocodeCache[name]=coords;
       localStorage.setItem('vc_geocache', JSON.stringify(geocodeCache));
@@ -1664,17 +1582,19 @@ function makeIcon(color) {
 }
 
 async function initMap() {
-  const container=document.getElementById('mapContainer');
   const loading=document.getElementById('mapLoading');
+  loading.style.display='flex';
 
   if (!mapInstance) {
     mapInstance=L.map('mapContainer',{zoomControl:true}).setView([38.716,-9.139],13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
       attribution:'© OpenStreetMap', maxZoom:19
     }).addTo(mapInstance);
-  } else {
-    loading.style.display='flex';
   }
+
+  // Clear existing markers before redrawing
+  mapMarkers.forEach(m => m.remove());
+  mapMarkers = [];
 
   const all=[
     ...RESTAURANTS.map(r=>({...r,type:'visited'})),
@@ -1683,19 +1603,22 @@ async function initMap() {
 
   const bounds=[];
   for (const r of all) {
-    const coords = await geocode(r.name);
+    // Use hardcoded coords if available, otherwise try geocoding
+    let coords = (r.lat && r.lng) ? [r.lat, r.lng] : await geocode(r.name);
     if (!coords) continue;
     bounds.push(coords);
-    const color=r.type==='visited'?'#3D6B4F':'#8B6914';
+    const color=r.type==='visited'?'#B85C38':'#8B6914';
     const score=r.type==='visited'?`<br><strong>${calcOverall(r)}/10</strong>`:'';
-    L.marker(coords, {icon:makeIcon(color)})
+    const marker = L.marker(coords, {icon:makeIcon(color)})
       .addTo(mapInstance)
       .bindPopup(`<strong>${r.name}</strong><br>${r.category} · ${r.price}${score}`);
+    mapMarkers.push(marker);
   }
 
-  if (bounds.length) mapInstance.fitBounds(bounds, {padding:[30,30]});
+  if (bounds.length) mapInstance.fitBounds(bounds, {padding:[40,40]});
   loading.style.display='none';
-  mapInstance.invalidateSize();
+  // Delay invalidateSize so the container is fully painted
+  setTimeout(()=>{ if(mapInstance) mapInstance.invalidateSize(); }, 200);
 }
 
 // ══ OPTIONS SHEET ══════════════════════════════════════════════════════════════
@@ -1739,16 +1662,36 @@ function saveFriends(f) {
   localStorage.setItem(userKey(currentUser.id,'friends'), JSON.stringify(f));
 }
 
-function addFriend() {
+async function addFriend() {
   const input = document.getElementById('friend-search');
   const name  = input.value.trim();
   const err   = document.getElementById('friend-error');
   err.textContent = '';
   if (!name) return;
   if (name.toLowerCase() === currentUser.name.toLowerCase()) { err.textContent = 'Não te podes adicionar a ti próprio 😅'; return; }
-  const allUsers = getUsers();
-  const found = allUsers.find(u => u.name.toLowerCase() === name.toLowerCase());
-  if (!found) { err.textContent = 'Utilizador não encontrado'; return; }
+
+  // Check local users first (same browser)
+  const allLocalUsers = getUsers();
+  let found = allLocalUsers.find(u => u.name.toLowerCase() === name.toLowerCase());
+
+  // If not found locally and cloud is configured, search Firebase
+  if (!found && FIREBASE_URL) {
+    err.textContent = 'A procurar na base de dados…';
+    const cloudUser = await findFriendInCloud(name);
+    if (cloudUser) {
+      found = { id: cloudUser.id, name: cloudUser.name };
+      if (cloudUser.restaurants) localStorage.setItem(userKey(cloudUser.id,'r'), JSON.stringify(cloudUser.restaurants));
+      if (cloudUser.wishlist)     localStorage.setItem(userKey(cloudUser.id,'w'), JSON.stringify(cloudUser.wishlist));
+    }
+    err.textContent = '';
+  }
+
+  if (!found) {
+    err.textContent = FIREBASE_URL
+      ? 'Utilizador não encontrado (o teu amigo precisa de ter usado a app primeiro)'
+      : 'Utilizador não encontrado';
+    return;
+  }
   const friends = getFriends();
   if (friends.find(f => f.id === found.id)) { err.textContent = 'Já és amigo deste utilizador'; return; }
   friends.push({ id: found.id, name: found.name });
@@ -1765,6 +1708,12 @@ function removeFriend(fid) {
 }
 
 function renderFriends() {
+  // Show correct cloud status banner
+  const hasCloud = typeof FIREBASE_URL !== 'undefined' && FIREBASE_URL;
+  const cloudBanner  = document.getElementById('cloud-status-banner');
+  const noCloudBanner = document.getElementById('no-cloud-banner');
+  if (cloudBanner)  cloudBanner.style.display  = hasCloud ? '' : 'none';
+  if (noCloudBanner) noCloudBanner.style.display = hasCloud ? 'none' : '';
   const friends = getFriends();
   const c = document.getElementById('friends-list');
   if (!friends.length) {
@@ -1949,7 +1898,90 @@ if (savedUserId) {
     updateHomeCounters(); renderVisited(); updateFilterBtn(); updateActivePills();
   }
 }
+
+// ══ FIREBASE CLOUD DATABASE ═══════════════════════════════════════════════════
+// Para ativar a base de dados partilhada (amigos entre dispositivos + admin):
+// 1. Vai a https://console.firebase.google.com e cria um projeto (gratuito)
+// 2. Clica em "Realtime Database" → "Criar base de dados" → modo de teste
+// 3. Copia o URL da base de dados (ex: https://petisco-xxx-default-rtdb.firebaseio.com)
+// 4. Cola aqui em baixo a substituir o placeholder:
+const FIREBASE_URL = 'https://console.firebase.google.com/project/petisco-7be54/database/petisco-7be54-default-rtdb/data/~2F'; // ex: 'https://petisco-app-default-rtdb.firebaseio.com'
+
+const ADMIN_USER_ID = 'u_daisymags'; // Só este utilizador tem acesso ao painel admin
+
+async function cloudGet(path) {
+  if (!FIREBASE_URL) return null;
+  try {
+    const res = await fetch(`${FIREBASE_URL}/${path}.json`);
+    return await res.json();
+  } catch(e) { return null; }
+}
+
+async function cloudSet(path, data) {
+  if (!FIREBASE_URL) return;
+  try {
+    await fetch(`${FIREBASE_URL}/${path}.json`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+  } catch(e) {}
+}
+
+function cloudUserKey(uid) {
+  return `users/${uid.replace(/[^a-zA-Z0-9_]/g,'_')}`;
+}
+
+async function syncUserToCloud() {
+  if (!FIREBASE_URL || !currentUser) return;
+  const data = {
+    name: currentUser.name,
+    id: currentUser.id,
+    restaurants: RESTAURANTS,
+    wishlist: wishlist,
+    syncedAt: Date.now()
+  };
+  await cloudSet(cloudUserKey(currentUser.id), data);
+}
+
+async function findFriendInCloud(username) {
+  if (!FIREBASE_URL) return null;
+  const allUsers = await cloudGet('users');
+  if (!allUsers) return null;
+  const entry = Object.values(allUsers).find(u =>
+    u.name && u.name.toLowerCase() === username.toLowerCase()
+  );
+  return entry || null;
+}
+
+// ── Admin panel (only for DaisyMags) ────────────────────────────────────────
+async function openAdminPanel() {
+  if (!currentUser || currentUser.id !== ADMIN_USER_ID) return;
+  if (!FIREBASE_URL) { showToast('Firebase não configurado'); return; }
+  const overlay = document.getElementById('adminOverlay');
+  overlay.classList.remove('hidden');
+  document.getElementById('adminContent').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-2)">A carregar utilizadores…</div>';
+  const allUsers = await cloudGet('users');
+  if (!allUsers) { document.getElementById('adminContent').innerHTML='<p style="padding:20px">Sem dados.</p>'; return; }
+  const users = Object.values(allUsers);
+  document.getElementById('adminContent').innerHTML = `
+    <div style="font-size:13px;color:var(--text-2);margin-bottom:12px">${users.length} utilizadores registados</div>
+    ${users.map(u=>`
+      <div style="background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid var(--border)">
+        <div style="font-weight:600;color:var(--text)">${u.name}</div>
+        <div style="font-size:13px;color:var(--text-2);margin-top:4px">
+          ${(u.restaurants||[]).length} restaurantes visitados · ${(u.wishlist||[]).length} na wishlist
+          ${u.syncedAt ? `<br>Última sincronização: ${new Date(u.syncedAt).toLocaleDateString('pt-PT')}` : ''}
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function closeAdminPanel() {
+  document.getElementById('adminOverlay').classList.add('hidden');
+}
+
 </script>
-
-
-</body></html>
+</body>
+</html>
