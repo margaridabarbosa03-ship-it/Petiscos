@@ -37,6 +37,7 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
   padding:32px 24px;
 }
 .profile-overlay.hidden { display:none; }
+.hidden { display:none !important; }
 .profile-logo { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; text-align:center; margin-bottom:6px; }
 .profile-logo span { color:var(--accent); }
 .profile-tagline { font-size:14px; color:var(--text-2); text-align:center; margin-bottom:40px; }
@@ -109,7 +110,7 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 .page.active { display:block; }
 
 /* ── HOME PAGE ─────────────────────────────────────────────────────────── */
-.home-content { padding:24px 20px; padding-bottom:calc(var(--nav-h)+24px); }
+.home-content { padding:24px 20px; padding-bottom:calc(var(--nav-h)+56px); }
 .home-greeting { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:var(--text); margin-bottom:4px; }
 .home-sub { font-size:13px; color:var(--text-2); margin-bottom:28px; }
 .home-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
@@ -229,8 +230,8 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 
 /* ── MAP ────────────────────────────────────────────────────────────────── */
 .map-wrap { position:relative; }
-#page-map { padding-bottom: 16px !important; }
-#mapContainer { height:calc(100dvh - 260px); min-height:300px; border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); }
+#page-map { padding-bottom: 8px !important; overflow: hidden; }
+#mapContainer { height:300px; min-height:250px; border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); }
 .map-legend { display:flex; gap:12px; padding:10px 0; }
 .map-legend-item { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-2); font-weight:500; }
 .map-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
@@ -384,14 +385,15 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
   </div>
 
   <div class="auth-form" id="form-login">
-    <input class="form-input auth-input" id="login-user" placeholder="Nome de utilizador" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()" />
+    <input class="form-input auth-input" id="login-email" placeholder="Email" type="email" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()" />
     <input class="form-input auth-input" id="login-pass" placeholder="Password" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
     <div class="auth-error" id="login-error"></div>
     <button class="profile-enter-btn" onclick="doLogin()">Entrar →</button>
   </div>
 
   <div class="auth-form" id="form-register" style="display:none">
-    <input class="form-input auth-input" id="reg-user" placeholder="Nome de utilizador" autocomplete="username" onkeydown="if(event.key==='Enter')doRegister()" />
+    <input class="form-input auth-input" id="reg-email" placeholder="Email" type="email" autocomplete="email" onkeydown="if(event.key==='Enter')doRegister()" />
+    <input class="form-input auth-input" id="reg-name" placeholder="Nome de exibição (ex: Margarida)" autocomplete="nickname" onkeydown="if(event.key==='Enter')doRegister()" />
     <input class="form-input auth-input" id="reg-pass" placeholder="Password" type="password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()" />
     <input class="form-input auth-input" id="reg-pass2" placeholder="Confirmar password" type="password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()" />
     <div class="auth-error" id="reg-error"></div>
@@ -653,12 +655,17 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 
 <!-- ADMIN PANEL OVERLAY -->
 <div class="modal-overlay hidden" id="adminOverlay" onclick="if(event.target===this)closeAdminPanel()">
-  <div class="modal" style="max-height:85vh;overflow-y:auto">
+  <div class="modal" style="max-height:90vh;overflow-y:auto">
     <div class="modal-header">
       <div class="modal-title">🛡️ Painel Admin</div>
       <button class="modal-close" onclick="closeAdminPanel()">×</button>
     </div>
-    <div id="adminContent" style="padding:8px 0"></div>
+    <div style="padding:0 0 8px">
+      <button onclick="syncUserToCloud().then(()=>loadAdminPanel())" style="width:100%;padding:10px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;margin-bottom:12px">
+        🔄 Sincronizar os meus dados e atualizar
+      </button>
+      <div id="adminContent"></div>
+    </div>
   </div>
 </div>
 
@@ -872,7 +879,7 @@ const DEMO_RESTAURANTS = [
 
 // ── Seed accounts (always exist, versioned) ───────────────────────────────────
 const SEED_ACCOUNTS = [
-  { id:'u_daisymags', name:'DaisyMags', password:'maguimagui', dataVersion:'v2' }
+  { id:'u_daisymags', name:'DaisyMags', email:'ammba@iscte-iul.pt', altEmail:'margarida.barbosa03@gmail.com', password:'maguimagui', dataVersion:'v2' }
 ];
 
 // ══ AUTH ══════════════════════════════════════════════════════════════════════
@@ -927,27 +934,30 @@ function switchAuthTab(tab) {
 }
 
 function doLogin() {
-  const name = document.getElementById('login-user').value.trim();
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
   const pass  = document.getElementById('login-pass').value;
   const err   = document.getElementById('login-error');
-  if (!name||!pass) { err.textContent='Preenche todos os campos'; return; }
-  const user  = getUsers().find(u => u.name.toLowerCase()===name.toLowerCase() && u.password===pass);
-  if (!user) { err.textContent='Utilizador ou password incorretos'; return; }
+  if (!email||!pass) { err.textContent='Preenche todos os campos'; return; }
+  const user = getUsers().find(u => ((u.email||'').toLowerCase()===email || (u.altEmail||'').toLowerCase()===email) && u.password===pass);
+  if (!user) { err.textContent='Email ou password incorretos'; return; }
   enterApp(user);
 }
 
 function doRegister() {
-  const name  = document.getElementById('reg-user').value.trim();
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const name  = document.getElementById('reg-name').value.trim();
   const pass  = document.getElementById('reg-pass').value;
   const pass2 = document.getElementById('reg-pass2').value;
   const err   = document.getElementById('reg-error');
-  if (!name||!pass||!pass2) { err.textContent='Preenche todos os campos'; return; }
+  if (!email||!name||!pass||!pass2) { err.textContent='Preenche todos os campos'; return; }
+  if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) { err.textContent='Email inválido'; return; }
   if (name.length<2) { err.textContent='Nome deve ter pelo menos 2 caracteres'; return; }
   if (pass.length<4) { err.textContent='Password deve ter pelo menos 4 caracteres'; return; }
   if (pass!==pass2)  { err.textContent='As passwords não coincidem'; return; }
   const users = getUsers();
-  if (users.find(u=>u.name.toLowerCase()===name.toLowerCase())) { err.textContent='Este nome de utilizador já existe'; return; }
-  const newUser = { id:'u_'+Date.now(), name, password:pass };
+  if (users.find(u=>(u.email||'').toLowerCase()===email)) { err.textContent='Este email já está registado'; return; }
+  if (users.find(u=>u.name.toLowerCase()===name.toLowerCase())) { err.textContent='Este nome já está em uso — escolhe outro'; return; }
+  const newUser = { id:'u_'+Date.now(), name, email, password:pass };
   users.push(newUser);
   saveUsers(users);
   enterApp(newUser);
@@ -973,7 +983,7 @@ function logout() {
   document.getElementById('mainHeader').style.display = 'none';
   document.getElementById('bottomNav').style.display  = 'none';
   document.getElementById('profileOverlay').classList.remove('hidden');
-  ['login-user','login-pass','reg-user','reg-pass','reg-pass2'].forEach(id=>{
+  ['login-email','login-pass','reg-email','reg-name','reg-pass','reg-pass2'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.value='';
   });
   document.getElementById('login-error').textContent='';
@@ -1581,7 +1591,23 @@ function makeIcon(color) {
   });
 }
 
+function resizeMapContainer() {
+  const mapEl   = document.getElementById('mapContainer');
+  const header  = document.getElementById('mainHeader');
+  const nav     = document.getElementById('bottomNav');
+  const legend  = document.querySelector('.map-legend');
+  const mapPage = document.getElementById('page-map');
+  if (!mapEl || !header || !nav) return;
+  const usedH = header.offsetHeight
+              + (legend ? legend.offsetHeight : 44)
+              + 28; // top/bottom padding of #page-map
+  const h = Math.max(window.innerHeight - nav.offsetHeight - usedH, 260);
+  mapEl.style.height = h + 'px';
+}
+window.addEventListener('resize', () => { if (document.getElementById('page-map').classList.contains('active')) resizeMapContainer(); });
+
 async function initMap() {
+  resizeMapContainer();
   const loading=document.getElementById('mapLoading');
   loading.style.display='flex';
 
@@ -1618,7 +1644,7 @@ async function initMap() {
   if (bounds.length) mapInstance.fitBounds(bounds, {padding:[40,40]});
   loading.style.display='none';
   // Delay invalidateSize so the container is fully painted
-  setTimeout(()=>{ if(mapInstance) mapInstance.invalidateSize(); }, 200);
+  setTimeout(()=>{ resizeMapContainer(); if(mapInstance) mapInstance.invalidateSize(); }, 200);
 }
 
 // ══ OPTIONS SHEET ══════════════════════════════════════════════════════════════
@@ -1863,16 +1889,23 @@ if (isIOS() && localStorage.getItem('vc_ios_banner')!=='0') document.getElementB
 (function() {
   let users = getUsers(); let changed = false;
   for (const sa of SEED_ACCOUNTS) {
-    // Remove duplicate: same name but different id (e.g. manually registered before seed)
-    const dupe = users.find(u => u.name.toLowerCase()===sa.name.toLowerCase() && u.id!==sa.id);
+    // Remove duplicate: same name or email but different id (e.g. manually registered before seed)
+    const dupe = users.find(u => u.id!==sa.id && (
+      u.name.toLowerCase()===sa.name.toLowerCase() ||
+      (sa.email && u.email && u.email.toLowerCase()===sa.email.toLowerCase())
+    ));
     if (dupe) {
       users = users.filter(u=>u.id!==dupe.id);
-      // Redirect active session if it was pointing to the duplicate
       if (localStorage.getItem('pt_active')===dupe.id) localStorage.setItem('pt_active', sa.id);
       changed = true;
     }
-    // Add seed account if missing
-    if (!users.find(u=>u.id===sa.id)) { users.push({id:sa.id,name:sa.name,password:sa.password}); changed=true; }
+    // Add seed account if missing (include email)
+    if (!users.find(u=>u.id===sa.id)) { users.push({id:sa.id,name:sa.name,email:sa.email||'',password:sa.password}); changed=true; }
+    // Ensure existing seed account has email set
+    else {
+      const existing = users.find(u=>u.id===sa.id);
+      if (sa.email && !existing.email) { existing.email=sa.email; changed=true; }
+    }
     // Re-seed data if version changed
     const versionKey = userKey(sa.id,'data_version');
     const needsReseed = localStorage.getItem(versionKey) !== sa.dataVersion;
@@ -1905,7 +1938,7 @@ if (savedUserId) {
 // 2. Clica em "Realtime Database" → "Criar base de dados" → modo de teste
 // 3. Copia o URL da base de dados (ex: https://petisco-xxx-default-rtdb.firebaseio.com)
 // 4. Cola aqui em baixo a substituir o placeholder:
-const FIREBASE_URL = 'https://console.firebase.google.com/project/petisco-7be54/database/petisco-7be54-default-rtdb/data/~2F'; // ex: 'https://petisco-app-default-rtdb.firebaseio.com'
+const FIREBASE_URL = 'https://petisco-7be54-default-rtdb.firebaseio.com';
 
 const ADMIN_USER_ID = 'u_daisymags'; // Só este utilizador tem acesso ao painel admin
 
@@ -1957,25 +1990,64 @@ async function findFriendInCloud(username) {
 // ── Admin panel (only for DaisyMags) ────────────────────────────────────────
 async function openAdminPanel() {
   if (!currentUser || currentUser.id !== ADMIN_USER_ID) return;
-  if (!FIREBASE_URL) { showToast('Firebase não configurado'); return; }
-  const overlay = document.getElementById('adminOverlay');
-  overlay.classList.remove('hidden');
-  document.getElementById('adminContent').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-2)">A carregar utilizadores…</div>';
+  if (!FIREBASE_URL) { showToast('Firebase não configurado — adiciona o URL no código'); return; }
+  document.getElementById('adminOverlay').classList.remove('hidden');
+  await loadAdminPanel();
+}
+
+async function loadAdminPanel() {
+  const content = document.getElementById('adminContent');
+  content.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-2)">⏳ A carregar utilizadores…</div>';
   const allUsers = await cloudGet('users');
-  if (!allUsers) { document.getElementById('adminContent').innerHTML='<p style="padding:20px">Sem dados.</p>'; return; }
-  const users = Object.values(allUsers);
-  document.getElementById('adminContent').innerHTML = `
-    <div style="font-size:13px;color:var(--text-2);margin-bottom:12px">${users.length} utilizadores registados</div>
-    ${users.map(u=>`
-      <div style="background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid var(--border)">
-        <div style="font-weight:600;color:var(--text)">${u.name}</div>
-        <div style="font-size:13px;color:var(--text-2);margin-top:4px">
-          ${(u.restaurants||[]).length} restaurantes visitados · ${(u.wishlist||[]).length} na wishlist
-          ${u.syncedAt ? `<br>Última sincronização: ${new Date(u.syncedAt).toLocaleDateString('pt-PT')}` : ''}
-        </div>
+  if (!allUsers || !Object.keys(allUsers).length) {
+    content.innerHTML = `
+      <div style="text-align:center;padding:24px;color:var(--text-2)">
+        <div style="font-size:32px;margin-bottom:10px">☁️</div>
+        <div style="font-weight:600;margin-bottom:6px">Ainda sem dados na cloud</div>
+        <div style="font-size:13px">Clica em "Sincronizar" acima para enviar os teus dados.<br>Os outros utilizadores aparecem aqui quando usarem a app.</div>
+      </div>`;
+    return;
+  }
+  const users = Object.values(allUsers).sort((a,b)=>(b.syncedAt||0)-(a.syncedAt||0));
+  const totalRest = users.reduce((s,u)=>s+(u.restaurants||[]).length,0);
+  content.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:var(--accent-soft);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:var(--accent)">${users.length}</div>
+        <div style="font-size:11px;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px">Utilizadores</div>
       </div>
-    `).join('')}
-  `;
+      <div style="background:var(--accent-2-soft);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:var(--accent-2)">${totalRest}</div>
+        <div style="font-size:11px;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px">Restaurantes</div>
+      </div>
+    </div>
+    ${users.map(u=>{
+      const rests = (u.restaurants||[]).sort((a,b)=>parseFloat(calcOverall(b))-parseFloat(calcOverall(a)));
+      const top3  = rests.slice(0,3);
+      const sync  = u.syncedAt ? new Date(u.syncedAt).toLocaleDateString('pt-PT',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : 'nunca';
+      return `
+        <div style="background:var(--card);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--border)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div>
+              <div style="font-weight:700;font-size:15px;color:var(--text)">👤 ${u.name}</div>
+              <div style="font-size:12px;color:var(--text-3);margin-top:1px">Sync: ${sync}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:13px;font-weight:600;color:var(--accent)">${rests.length} visitados</div>
+              <div style="font-size:12px;color:var(--text-2)">${(u.wishlist||[]).length} wishlist</div>
+            </div>
+          </div>
+          ${top3.length ? `
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);margin-bottom:6px">Top restaurantes</div>
+            ${top3.map((r,i)=>`
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px">
+                <span style="color:var(--text)">${['🥇','🥈','🥉'][i]} ${r.name}</span>
+                <span style="font-weight:600;color:var(--accent)">${calcOverall(r)}</span>
+              </div>
+            `).join('')}
+          ` : '<div style="font-size:13px;color:var(--text-3)">Sem restaurantes ainda</div>'}
+        </div>`;
+    }).join('')}`;
 }
 
 function closeAdminPanel() {
