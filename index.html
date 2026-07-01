@@ -1701,7 +1701,7 @@ async function addFriend() {
   let found = allLocalUsers.find(u => u.name.toLowerCase() === name.toLowerCase());
 
   // If not found locally and cloud is configured, search Firebase
-  if (!found && FIREBASE_URL) {
+  if (!found && FIREBASE_URL) {https://petisco-7be54-default-rtdb.firebaseio.com
     err.textContent = 'A procurar na base de dados…';
     const cloudUser = await findFriendInCloud(name);
     if (cloudUser) {
